@@ -14,18 +14,17 @@ const Item = ({ item, options }: { item: MenuItem; options?: string[] }) => {
         </header>
       </div>
       <div className='ingredients-container'>
-        {options
-          ? options
-          : item?.ingredients?.map((ingredientItem, index) => {
-              return (
-                <Ingredients
-                  key={index}
-                  type={item.type}
-                  ingredientItem={ingredientItem}
-                  endOfArray={item.ingredients.length - 1 == index}
-                />
-              )
-            })}
+        {(options || item?.ingredients)?.map((ingredientItem, index) => {
+          console.log(index)
+          return (
+            <Ingredients
+              key={index}
+              type={item.type}
+              ingredientItem={ingredientItem}
+              endOfArray={item?.ingredients?.length - 1 == index}
+            />
+          )
+        })}
       </div>
     </div>
   )

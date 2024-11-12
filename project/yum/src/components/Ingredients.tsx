@@ -9,7 +9,7 @@ const Ingredients = ({ ingredientItem, endOfArray, type }: any) => {
         </span>
       ) : (
         // For wonton items, display ingredient as a button
-        <button>
+        <button className='btn'>
           {ingredientItem}
           {!endOfArray && ','}
         </button>

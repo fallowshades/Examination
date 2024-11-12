@@ -123,7 +123,7 @@ const Menu = () => {
               return (
                 <div
                   key={item.id}
-                  className='menu'
+                  className={`menu ${type == 'wonton' && 'menuEffect'}`}
                 >
                   {type == 'wonton' ? (
                     <Item item={item} />

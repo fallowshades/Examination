@@ -838,3 +838,52 @@ Menu.tsx
      <h2 className='item-info'>Menu</h2>
       <div className=''>
 ```
+
+####
+
+Ingredients.tsx
+
+```tsx
+ <button className='btn'>
+```
+
+Item.tsx
+
+- can map toggable
+
+```tsx
+{
+  ;(options || item?.ingredients)?.map((ingredientItem, index) => {
+    console.log(index)
+    return (
+      <Ingredients
+        key={index}
+        type={item.type}
+        ingredientItem={ingredientItem}
+        endOfArray={item?.ingredients?.length - 1 == index}
+      />
+    )
+  })
+}
+```
+
+index.css
+
+```css
+.btn {
+  background: var(--clr-grey-8);
+}
+
+.menuEffect:hover {
+  background-color: var(--clr-black);
+}
+```
+
+Menu.tsx
+
+```tsx
+    <div
+                  key={item.id}
+                  className='menu'
+                  className={`menu ${type == 'wonton' && 'menuEffect'}`}
+```
