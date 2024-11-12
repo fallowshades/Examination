@@ -3,13 +3,14 @@ import Menu, { loader as MenuLoader } from './routes/Menu'
 import Checkout, { loader as CheckoutLoader } from './routes/Checkout'
 import Receipts, { loader as ReceiptsLoader } from './routes/Receipts'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Layout, { loader as layoutLoader } from './routes/Layout'
 import { store } from './lib/store'
 import NoMatch from './routes/NoMatch'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Menu />,
-    loader: MenuLoader(store),
+    element: <Layout />,
+    loader: layoutLoader(store),
 
     children: [
       {

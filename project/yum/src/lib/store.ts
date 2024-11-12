@@ -1,7 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
+import menuReducer from '@/lib/features/menu'
+import tenantReducer from '@/lib/features/tenantSlice'
+import apiReducer from '@/lib/features/apiKeySlice'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    menuState: menuReducer,
+    tenantState: tenantReducer,
+    apiState: apiReducer,
+  },
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

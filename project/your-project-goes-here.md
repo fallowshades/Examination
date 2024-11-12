@@ -245,3 +245,258 @@ export const useDashboardContext = () => {
 
 export default Layout
 ```
+
+#### load data
+
+Layout
+
+```
+
+```
+
+Menu
+
+Checkout
+
+Receipts
+
+##### api key wo tenant
+
+App.tsx
+
+- update loader
+
+```tsx
+import Layout, { loader as layoutLoader } from './routes/Layout'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    loader: layoutLoader(store),
+
+    children: [
+```
+
+apiKeySlice.tsx
+
+- use transitional store instead of context. which is better?
+
+```tsx
+type ApiKeyState = {
+  apiKey: string | null
+
+}
+
+initialState: getApiKeyFromLocalStorage,
+  reducers: {
+    setApiKey(state, action: PayloadAction<string>) {
+      state.apiKey = action.payload
+      localStorage.setItem('tenant', JSON.stringify(state))
+    },
+
+    clearApiKey(state) {
+      // state.apiKey = null
+      localStorage.setItem('tenant', JSON.stringify(initialApiKeyState))
+```
+
+tenantSlice.tsx
+
+```tsx
+type TenantState = {
+  id: string | null
+  name: string | null
+  createdAt: string | null
+}
+
+// Initial state for tenants
+const initialState: TenantState = {
+  id: null,
+  name: null,
+  createdAt: null,
+}
+
+const getTenantFromLocalStorage = (): TenantState => {
+  const tenant = localStorage.getItem('tenant')
+  return tenant ? JSON.parse(tenant) : initialState
+}
+```
+
+menu.tsx
+
+```tsx
+import customFetch from '@/utils/customFetch'
+
+interface Headers {
+  Authorization: string
+  'Content-Type': string
+  'X-Tenant-Name'?: string // Optional property
+}
+import axios, { AxiosRequestConfig, AxiosHeaders } from 'axios'
+```
+
+- tested two approaches
+
+- typed config with headers, empty object payload, access key in bearer header
+
+```tsx
+//   const apiKey = store.getState().apiState.apiKey
+//   const subdomain = '9oxx' //|| window.location.hostname.split('.')[0] //C:\Windows\System32\drivers\etc\hosts // local dev env.
+//   const tenant = store.getState().tenantState.name || subdomain
+//   console.log(apiKey, tenant)
+//   //   const headers: Headers = new AxiosHeaders({
+//   //     Authorization: `Bearer ${apiKey}`,
+//   //     'Content-Type': 'application/json',
+//   //   })
+
+//   // Initialize AxiosHeaders
+//   const headers = new AxiosHeaders()
+
+//   // Set common headers
+//   headers.set('Authorization', `Bearer ${apiKey}`)
+//   headers.set('Content-Type', 'application/json')
+//   // {
+//   //         Authorization: `Bearer ${apiKey}`, // Include the API key in the Authorization header
+//   //         'Content-Type': 'application/json',
+//   //       }
+
+//   // If the tenant is required in headers, you can add it as well
+//   if (tenant) {
+//     //headers['X-Tenant-Name'] = tenant // Replace `X-Tenant-Name` with the actual tenant header key if needed
+//     headers.set('X-Tenant-Name', tenant)
+//   }
+
+//   const config: AxiosRequestConfig = {
+//     //type obj instead of obj literals in arguments
+//     headers,
+//   }
+const params = { type: 'wonton' } // Example body data, adjust as needed
+const { data } = await customFetch.post('/menu', params)
+//   const { data } = await customFetch.post('/menu', {}, config)
+```
+
+menuSlice.tsx
+
+- update naming
+
+store.ts
+
+- insert reducers
+
+```ts
+import menuReducer from '@/lib/features/menu'
+import tenantReducer from '@/lib/features/tenantSlice'
+import apiReducer from '@/lib/features/apiKeySlice'
+
+  reducer: {
+    menuState: menuReducer,
+    tenantState: tenantReducer,
+    apiState: apiReducer,
+  },
+})
+```
+
+layout.tsx
+
+```tsx
+import {
+ ...
+  type LoaderFunction,
+} from 'react-router-dom'
+
+import { ReduxStore } from '@/lib/store'
+
+import { setApiKey } from '@/lib/features/apiKeySlice'
+import { setTenant } from '@/lib/features/tenantSlice'
+export const loader =
+  (store: ReduxStore): LoaderFunction =>
+  async () => {
+    try {
+      console.log('layout loader')
+      const apiKey = store.getState().apiState.apiKey
+      if (!apiKey) {
+        console.log('api key', apiKey)
+        const { data } = await customFetch.post('/keys') //should crud manage, post is basically get
+        //yum-7BTxHCyHhzIME5TI
+        if (data?.key) {
+          store.dispatch(setApiKey(data.key))
+        }
+      }
+      //ONboarding
+      //1. multi-tenant application, single-tenannt application, session-based tenant creation
+      const tenant = store.getState().tenantState.id
+      if (!tenant) {
+        console.log('tenant', tenant)
+        const params = { name: 'erik.jonsson@chassacademy.se' }
+        const { data } = await customFetch.post('/tenants', params) //no need batch
+        if (data?.key) {
+          store.dispatch(setTenant({ name: data.name, id: data.id }))
+        }
+      }
+      //200,401,404, need access key
+
+      return null
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+```
+
+Menu.tsx
+
+```tsx
+
+```
+
+customFetch.tsx
+
+```tsx
+ headers: {
+    'Content-Type': 'application/json', //required
+    Accept: 'application/json',
+  },
+})
+import { store } from '@/lib/store'
+// Adding interceptors to include headers in each request
+customFetch.interceptors.request.use(
+  (config) => {
+    // Fetch the API key and tenant name from the Redux store
+
+    const subdomain = '9oxx' //|| window.location.hostname.split('.')[0] //C:\Windows\System32\drivers\etc\hosts // local dev env.
+
+    const apiKey = store.getState().apiState.apiKey || 'yum-7BTxHCyHhzI'
+    const tenant = store.getState().tenantState.name || subdomain
+
+    // Include headers if values exist
+    if (apiKey) {
+      config.headers['Authorization'] = `Bearer ${apiKey}`
+    }
+    if (tenant) {
+      config.headers['X-Tenant-Name'] = tenant
+    }
+    config.headers['Content-Type'] = 'application/json'
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+customFetch.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('Error with request:', error.config)
+    console.error('Error details:', error)
+    return Promise.reject(error)
+  }
+)
+
+//customFetch.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
+
+export default customFetch
+//  'Content-Type': 'multipart/form-data',
+```
+
+####
