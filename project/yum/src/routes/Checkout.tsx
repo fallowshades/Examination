@@ -40,7 +40,38 @@ export const loader =
       return true
     } catch (error) {
       console.error('Error fetching menu:', error)
-      return null // Return null or some error data
+      return {
+        id: '3023b0f5',
+        items: [
+          {
+            id: 1,
+            type: 'wonton',
+            name: 'Karlstad',
+            description:
+              'En god friterad wonton med smaker från de värmländska skogarna.',
+            price: 129,
+            ingredients: ['kål', 'morot', 'salladslök'],
+          },
+          {
+            id: 12,
+            type: 'dip',
+            name: 'Chili Mayo',
+            description: 'Egengjord majonäs smaksatt med chili.',
+            price: 129,
+          },
+          {
+            id: 15,
+            type: 'drink',
+            name: 'Sprite',
+            description: 'Drink ipsum dolor fizzy, fruity & Sweet...',
+            price: 19,
+          },
+        ],
+        orderValue: 387,
+        eta: 10,
+        timestamp: '2024-12-24T13:37:00',
+        state: 'waiting',
+      } // Return null or some error data
     }
   }
 

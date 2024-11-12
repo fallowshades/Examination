@@ -25,7 +25,7 @@ export type CartState = {
 }
 /////////
 
-export type Menu = {
+export type MenuItem = {
   id: number
   type: string ///
   name: string
@@ -38,12 +38,12 @@ export type Orders = {
   id: string
   orderValue: number
   timestamp: string
-  items: Menu[]
+  items: MenuItem[]
 }
 
 export type Receipts = {
   id: string
   orderValue: number
   timestamp: string
-  items: Menu[]
+  items: MenuItem[]
 }

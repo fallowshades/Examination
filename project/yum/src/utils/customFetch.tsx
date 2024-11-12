@@ -1,9 +1,13 @@
 import axios from 'axios'
+//import https from 'https'
 const customFetch = axios.create({
   baseURL: 'https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com',
   headers: {
     'Content-Type': 'application/json', //required
     Accept: 'application/json',
+    // httpsAgent: new https.Agent({
+    //   rejectUnauthorized: false, // Disable certificate validation for self-signed certificates (for dev purposes only)
+    // }),
   },
 })
 import { store } from '@/lib/store'
@@ -21,9 +25,9 @@ customFetch.interceptors.request.use(
     if (apiKey) {
       config.headers['Authorization'] = `Bearer ${apiKey}`
     }
-    if (tenant) {
-      config.headers['X-Tenant-Name'] = tenant
-    }
+    // if (tenant) {
+    //   config.headers['X-Tenant-Name'] = tenant
+    // }
     config.headers['Content-Type'] = 'application/json'
 
     return config
@@ -41,6 +45,8 @@ customFetch.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+//customFetch.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false })
 
 //customFetch.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false });
 

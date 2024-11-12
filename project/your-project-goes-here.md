@@ -499,4 +499,184 @@ export default customFetch
 //  'Content-Type': 'multipart/form-data',
 ```
 
-####
+### temp do styles instead
+
+item.tsx
+
+- buttons or span
+
+```tsx
+import { MenuItem } from '@/utils/types'
+
+const Item = ({ item }: { item: MenuItem }) => {
+  return (
+    <div>
+      <div>
+        <header className='item-info'>
+          <h3> {item.name}</h3>
+
+          <p></p>
+          <h3>{item.price}SEK</h3>
+        </header>
+      </div>
+      <div className='ingredients-container'>
+        {item?.ingredients?.map((ingredientItem, index) => {
+          return (
+            <span key={index}>
+              {item.type == 'wonton' ? (
+                // For non-wonton items, display ingredient as text
+                <span>
+                  {ingredientItem}
+                  {item.ingredients.length - 1 !== index && ','}
+                </span>
+              ) : (
+                // For wonton items, display ingredient as a button
+                <button>
+                  {ingredientItem}
+                  {item.ingredients.length !== index && ','}
+                </button>
+              )}
+            </span>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+```
+
+index.css
+
+```css
+/*
+===============
+Fonts
+===============
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700&display=swap');
+
+*/
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+
+
+:root {
+...
+  --ff-primary: 'Fira Sans', sans-serif;
+  --ff-secondary: 'Fira Sans', sans-serif;
+  ...
+  --snow: #f4f3f1;
+  --ash: #eeeeee;
+  --clay: #605858;
+  --coal: #353131;
+  --dark-mint: #489078;
+  --shade-24-dark: rgba(#353131, 0.24);
+  --shade-24-light: rgba(#f1f0ec, 0.24);
+  --shade-12-light: rgba(#f1f0ec, 0.12);
+  --red: #eb5757;
+}
+
+body {
+
+  background: var(--dark-mint);
+  color: var(--ash);
+
+}
+
+p {
+
+  color: var(--ash);
+}
+```
+
+```css
+menu {
+  padding: 5rem 0;
+  background-color: var(--clay);
+}
+.menu-space {
+  padding-top: 2em;
+}
+
+.menu:hover {
+  background-color: var(--clr-black);
+}
+```
+
+```css
+.item-info p {
+  flex-grow: 1; /* Make the <p> tag take up remaining space */
+  text-align: center; /* Optionally center the "..." inside the <p> */
+  margin: 0; /* Remove default margin */
+  font-size: 1.5rem; /* Optional: Adjust size of "..." if needed */
+  border-bottom: 0.5px dotted var(--ash);
+  color: var(--ash);
+}
+
+.item-info h2 {
+  margin: 0; /* Remove margin for name and price */
+}
+
+/*array if ingredients*/
+.ingredients-container {
+  padding-left: 1em;
+  display: flex; /* Align ingredients horizontally */
+  flex-wrap: wrap; /* Allow ingredients to wrap if needed */
+  gap: 0.5rem; /* Optional: Add space between ingredients */
+}
+```
+
+Checkout.tsx
+Layout.tsx
+
+- static return
+
+Menu.tsx
+
+```tsx
+import { MenuItem } from '@/utils/types'
+import Item from '@/components/Item'
+
+const Menu = () => {
+  const data = useLoaderData() as MenuItem[]
+
+  // Combine all items into one array
+  const allItems = ['wonton', 'dip', 'drink'].map((type) => ({
+    type,
+    items: data.filter((item) => item.type === type),
+  }))
+  return (
+    <section className=''>
+      <div className='grid-template'>
+        {/* Render all items in a single loop */}
+        {allItems.map(({ type, items }) => (
+          <div
+            key={type}
+            className='menu-space'
+          >
+            {/* <h3>{type.charAt(0).toUpperCase() + type.slice(1)}</h3> */}
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className='menu'
+              >
+                <Item item={item} />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+```
+
+customFetch.tsx
+
+- comment out https bc we are on v8 browser ontop of node. we cant acess fs for https, axios manage when see https in url
+
+types.ts
+
+- update name
+
+```ts
+export type MenuItem = {
+```

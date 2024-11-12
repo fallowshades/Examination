@@ -1,3 +1,12 @@
+/*
+=============== 
+Fonts
+===============
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700&display=swap');
+
+*/
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+
 :root {
   /* dark shades of primary color*/
   --clr-primary-1: hsl(205, 86%, 17%);
@@ -31,8 +40,8 @@
   --clr-green-light: hsl(125, 71%, 66%);
   --clr-gold: #c59d5f;
   --clr-black: #222;
-  --ff-primary: 'Roboto', sans-serif;
-  --ff-secondary: 'Open Sans', sans-serif;
+  --ff-primary: 'Fira Sans', sans-serif;
+  --ff-secondary: 'Fira Sans', sans-serif;
   --transition: all 0.3s linear;
   --spacing: 0.25rem;
   --radius: 0.5rem;
@@ -40,6 +49,16 @@
   --dark-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   --max-width: 1170px;
   --fixed-width: 620px;
+
+  --snow: #f4f3f1;
+  --ash: #eeeeee;
+  --clay: #605858;
+  --coal: #353131;
+  --dark-mint: #489078;
+  --shade-24-dark: rgba(#353131, 0.24);
+  --shade-24-light: rgba(#f1f0ec, 0.24);
+  --shade-12-light: rgba(#f1f0ec, 0.12);
+  --red: #eb5757;
 }
 /*
 =============== 
@@ -56,8 +75,8 @@ Global Styles
 }
 body {
   font-family: var(--ff-secondary);
-  background: var(--clr-grey-10);
-  color: var(--clr-grey-1);
+  background: var(--dark-mint);
+  color: var(--ash);
   line-height: 1.5;
   font-size: 0.875rem;
 }
@@ -97,8 +116,7 @@ h4 {
   font-size: 0.875rem;
 }
 p {
-  margin-bottom: 1.25rem;
-  color: var(--clr-grey-5);
+  color: var(--ash);
 }
 @media screen and (min-width: 800px) {
   h1 {
@@ -152,7 +170,16 @@ Menu
 
 .menu {
   padding: 5rem 0;
+  background-color: var(--clay);
 }
+.menu-space {
+  padding-top: 2em;
+}
+
+.menu:hover {
+  background-color: var(--clr-black);
+}
+
 .title {
   text-align: center;
   margin-bottom: 2rem;
@@ -205,20 +232,37 @@ Menu
   border: 0.25rem solid var(--clr-gold);
   border-radius: var(--radius);
 }
-.item-info header {
+.item-info {
+  padding: 1em 1em;
   display: flex;
-  justify-content: space-between;
-  border-bottom: 0.5px dotted var(--clr-grey-5);
+  align-items: center; /* Align items vertically in the center */
+
+  width: 100%; /* Ensure it takes the full width */
 }
-.item-info h4 {
-  margin-bottom: 0.5rem;
+
+.item-info p {
+  flex-grow: 1; /* Make the <p> tag take up remaining space */
+  text-align: center; /* Optionally center the "..." inside the <p> */
+  margin: 0; /* Remove default margin */
+  font-size: 1.5rem; /* Optional: Adjust size of "..." if needed */
+  border-bottom: 0.5px dotted var(--ash);
+  color: var(--ash);
 }
-.price {
-  color: var(--clr-gold);
+
+.item-info h2 {
+  margin: 0; /* Remove margin for name and price */
 }
+
 .item-text {
   margin-bottom: 0;
   padding-top: 1rem;
+}
+
+.ingredients-container {
+  padding-left: 1em;
+  display: flex; /* Align ingredients horizontally */
+  flex-wrap: wrap; /* Allow ingredients to wrap if needed */
+  gap: 0.5rem; /* Optional: Add space between ingredients */
 }
 
 @media screen and (min-width: 768px) {

@@ -34,11 +34,11 @@ export const loader =
       if (!tenant) {
         console.log('tenant', tenant)
         const params = { name: 'erik.jonsson@chassacademy.se' }
-        const { data } = await customFetch.post('/tenants', params) //no need batch
-        console.log(data)
-        if (data?.key) {
-          store.dispatch(setTenant({ name: data.name, id: data.id }))
-        }
+        //const { data } = await customFetch.post('/tenants', params) //no need batch
+        // //console.log(data)
+        // if (data?.key) {
+        //   store.dispatch(setTenant({ name: data.name, id: data.id }))
+        // }
       }
       //200,401,404, need access key
 

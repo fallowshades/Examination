@@ -50,22 +50,82 @@ export const loader =
       //     headers,
       //   }
       const params = { type: 'wonton' } // Example body data, adjust as needed
-      const { data } = await customFetch.post('/menu', params)
+      //const { data } = await customFetch.post('/menu', params)
+      // .then((response) => {
+      //   console.log('Menu:', response.data)
+      // })
+      // .catch((error) => {
+      //   console.error('Error fetching menu:', error)
+      // })
       //   const { data } = await customFetch.post('/menu', {}, config)
-      console.log(data)
+
       // Return the response data along with the parameters to pass to the component
-      return { ...data, params }
+      //return { ...data, params }
       //   // return { ...response.data, params }
-      return true
+      return [
+        {
+          id: 1,
+          type: 'wonton',
+          name: 'Karlstad',
+          description:
+            'En god friterad wonton med smaker från de värmländska skogarna.',
+          price: 129,
+          ingredients: ['kål', 'morot', 'salladslök'],
+        },
+        {
+          id: 12,
+          type: 'dip',
+          name: 'Chili Mayo',
+          description: 'Egengjord majonäs smaksatt med chili.',
+          price: 129,
+        },
+        {
+          id: 15,
+          type: 'drink',
+          name: 'Sprite',
+          description: 'Drink ipsum dolor fizzy, fruity & Sweet...',
+          price: 19,
+        },
+      ]
     } catch (error) {
       console.error('Error fetching menu:', error)
       return null // Return null or some error data
     }
     return null
   }
-
+import { MenuItem } from '@/utils/types'
+import Item from '@/components/Item'
 const Menu = () => {
-  return <div>Menu</div>
+  const data = useLoaderData() as MenuItem[]
+
+  // Combine all items into one array
+  const allItems = ['wonton', 'dip', 'drink'].map((type) => ({
+    type,
+    items: data.filter((item) => item.type === type),
+  }))
+  return (
+    <section className=''>
+      <div className='grid-template'>
+        {/* Render all items in a single loop */}
+        {allItems.map(({ type, items }) => (
+          <div
+            key={type}
+            className='menu-space'
+          >
+            {/* <h3>{type.charAt(0).toUpperCase() + type.slice(1)}</h3> */}
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className='menu'
+              >
+                <Item item={item} />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+  )
 }
 
 export default Menu
