@@ -109,7 +109,8 @@ const Menu = () => {
   //   console.log(transformedData)
   return (
     <section className=''>
-      <div className='grid-template'>
+      <h2 className='item-info'>Menu</h2>
+      <div className=''>
         {/* Render all items in a single loop */}
         {allItems.map(({ type, items }) => (
           <div

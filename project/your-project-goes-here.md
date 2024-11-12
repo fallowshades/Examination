@@ -767,3 +767,74 @@ const Ingredients = ({ ingredientItem, endOfArray, type }: any) => {
 
 export default Ingredients
 ```
+
+####
+
+Navbar.tsx
+
+```tsx
+return (
+  <nav>
+    <div className='cart-container'>
+      <IoBagOutline className='cart-icon' />
+      <span className='cart-badge'>0</span>
+    </div>
+  </nav>
+)
+```
+
+index.css
+
+- relative top right
+
+```css
+.menu-space {
+  padding-bottom: 2em;
+}
+
+.cart-icon {
+  font-size: 24px; /* Adjust size as needed */
+  color: var(--clay);
+  background-color: var(var(--ash));
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px; /* Adjust positioning as needed */
+  right: -8px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  width: 18px;
+}
+
+.cart-container {
+  position: relative;
+  display: inline-block;
+  padding: 7px;
+  background-color: white;
+  border-radius: var(--radius);
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+}
+```
+
+Menu.tsx
+
+- did not want margin, skip the centering
+
+```tsx
+     <h2 className='item-info'>Menu</h2>
+      <div className=''>
+```
