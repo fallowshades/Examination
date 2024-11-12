@@ -1,36 +1,31 @@
 import { MenuItem } from '@/utils/types'
+import Ingredients from './Ingredients'
 
-const Item = ({ item }: { item: MenuItem }) => {
+const Item = ({ item, options }: { item: MenuItem; options?: string[] }) => {
+  console.log('item', item)
   return (
     <div>
       <div>
         <header className='item-info'>
-          <h3> {item.name}</h3>
+          <h3> {options ? item.type : item.name}</h3>
 
           <p></p>
           <h3>{item.price}SEK</h3>
         </header>
       </div>
       <div className='ingredients-container'>
-        {item?.ingredients?.map((ingredientItem, index) => {
-          return (
-            <span key={index}>
-              {item.type == 'wonton' ? (
-                // For non-wonton items, display ingredient as text
-                <span>
-                  {ingredientItem}
-                  {item.ingredients.length - 1 !== index && ','}
-                </span>
-              ) : (
-                // For wonton items, display ingredient as a button
-                <button>
-                  {ingredientItem}
-                  {item.ingredients.length !== index && ','}
-                </button>
-              )}
-            </span>
-          )
-        })}
+        {options
+          ? options
+          : item?.ingredients?.map((ingredientItem, index) => {
+              return (
+                <Ingredients
+                  key={index}
+                  type={item.type}
+                  ingredientItem={ingredientItem}
+                  endOfArray={item.ingredients.length - 1 == index}
+                />
+              )
+            })}
       </div>
     </div>
   )

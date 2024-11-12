@@ -547,6 +547,8 @@ const Item = ({ item }: { item: MenuItem }) => {
 
 index.css
 
+[font] https://fonts.google.com/specimen/Fira+Sans
+
 ```css
 /*
 ===============
@@ -679,4 +681,89 @@ types.ts
 
 ```ts
 export type MenuItem = {
+```
+
+#### correct menu mapping
+
+Menu.tsx
+
+- replacement to be inserted instead
+
+```tsx
+{
+  items.map((item) => {
+    const lazyBackendQuickFix = items.map((item) => item.name)
+    return (
+      <div
+        key={item.id}
+        className='menu'
+      >
+        {type == 'wonton' ? (
+          <Item item={item} />
+        ) : (
+          <Item
+            item={item}
+            options={lazyBackendQuickFix}
+          />
+        )}
+      </div>
+    )
+  })
+}
+```
+
+item.tsx
+
+-not there is a single difference that is toggleble
+
+```tsx
+import Ingredients from './Ingredients'
+
+const Item = ({ item, options }: { item: MenuItem; options?: string[] }) => {
+  console.log('item', item)
+  return (
+      <h3> {options ? item.type : item.name}</h3>
+
+        <div className='ingredients-container'>
+ {options
+          ? options
+          : item?.ingredients?.map((ingredientItem, index) => {
+              return (
+                <Ingredients
+                  key={index}
+                  type={item.type}
+                  ingredientItem={ingredientItem}
+                  endOfArray={item.ingredients.length - 1 == index}
+                />
+              )
+            })}
+        </div>)}
+```
+
+Ingredients.tsx
+
+- boolean end of line
+
+```tsx
+const Ingredients = ({ ingredientItem, endOfArray, type }: any) => {
+  return (
+    <span>
+      {type == 'wonton' ? (
+        // For non-wonton items, display ingredient as text
+        <span>
+          {ingredientItem}
+          {!endOfArray && ','}
+        </span>
+      ) : (
+        // For wonton items, display ingredient as a button
+        <button>
+          {ingredientItem}
+          {!endOfArray && ','}
+        </button>
+      )}
+    </span>
+  )
+}
+
+export default Ingredients
 ```
