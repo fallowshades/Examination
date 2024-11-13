@@ -16,7 +16,7 @@ const Item = ({
 }) => {
   const dispatch = useAppDispatch()
   const menuProduct: CartItem = {
-    cartID: String(item.id),
+    cartID: String(item.id + item.type),
     productID: item.id,
     title: item.name,
     price: String(item.price),
@@ -34,7 +34,7 @@ const Item = ({
       {' '}
       <div>
         <header className='item-info'>
-          <h3> {options == null ? item.type : item.name}</h3>
+          <h3> {options ? item.type : item.name}</h3>
 
           <p></p>
           <h3>{item.price}SEK</h3>

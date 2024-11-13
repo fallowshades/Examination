@@ -73,6 +73,24 @@ export const loader =
           ingredients: ['kål', 'morot', 'salladslök'],
         },
         {
+          id: 2,
+          type: 'wonton',
+          name: 'lala',
+          description:
+            'En god friterad wonton med smaker från de värmländska skogarna.',
+          price: 129,
+          ingredients: ['kål', 'morot', 'salladslök'],
+        },
+        {
+          id: 3,
+          type: 'wonton',
+          name: 'kitrbonana',
+          description:
+            'En god friterad wonton med smaker från de värmländska skogarna.',
+          price: 129,
+          ingredients: ['kål', 'morot', 'salladslök'],
+        },
+        {
           id: 12,
           type: 'dip',
           name: 'Chili Mayo',
@@ -96,6 +114,7 @@ export const loader =
 import { MenuItem } from '@/utils/types'
 import SharedCardLayout from '@/components/SharedCardLayout'
 // import { transformData } from '@/utils/transformations'
+
 const Menu = () => {
   const data = useLoaderData() as MenuItem[]
 

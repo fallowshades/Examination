@@ -1097,3 +1097,134 @@ SharedCardLayout.tsx
             style={itemStyle}
            >...
 ```
+
+#### distinct hook seperation of consern map key index
+
+DistinctCardLayout.tsx
+
+```tsx
+import { useState } from 'react'
+import Item from '@/components/Item'
+
+const DistinctCardLayout = ({ item, type, lazyBackendQuickFix }: any) => {
+  const [clicked, setClicked] = useState(false)
+
+  const itemStyle =
+    type === 'wonton'
+      ? {
+          backgroundColor: clicked ? 'green' : '',
+          border: clicked ? '2px solid darkgreen' : '',
+        }
+      : {}
+
+  return (
+    <div
+      key={item.id}
+      style={itemStyle}
+      className={`menu ${type == 'wonton' && 'menuEffect'}`}
+    >
+      {type == 'wonton' ? (
+        <Item
+          item={item}
+          clicked={clicked}
+          setClicked={setClicked}
+        />
+      ) : (
+        <Item
+          item={item}
+          options={lazyBackendQuickFix}
+          clicked={clicked}
+          setClicked={setClicked}
+        />
+      )}
+    </div>
+  )
+}
+
+export default DistinctCardLayout
+```
+
+Item.tsx
+
+- uh d ont need check null, mb undefined?
+
+```tsx
+<h3> {options ? item.type : item.name}</h3>
+```
+
+Navbar.tsx
+
+```tsx
+import { useAppSelector } from '@/lib/hooks'
+const Navbar = () => {
+  const numItemsInCart =
+    useAppSelector((state) => state.menuState.numItemsInCart) || 0
+  return (
+    <nav>
+        <span className='cart-badge'>{numItemsInCart}</span>
+    ...)
+}
+```
+
+SharedCardLayout.tsx
+
+```tsx
+import { useState } from 'react'
+import DistinctCardLayout from './DistinctCardLayout'
+return (
+  <DistinctCardLayout
+    key={item.id}
+    item={item}
+    type={type}
+    lazyBackendQuickFix={lazyBackendQuickFix}
+  />
+)
+```
+
+features/menu.tsx
+
+- note need policy add to cart.
+
+```tsx
+const defaultState: CartState = {
+  cartItems: [],
+
+  numItemsInCart: 0,
+  cartTotal: 0,
+}
+```
+
+routes/Menu.tsx
+
+- multiple item in group with same type
+
+```tsx
+      {
+          id: 2,
+          type: 'wonton',
+          name: 'lala',
+          description:
+            'En god friterad wonton med smaker från de värmländska skogarna.',
+          price: 129,
+          ingredients: ['kål', 'morot', 'salladslök'],
+        },
+        {
+          id: 3,
+          type: 'wonton',
+          name: 'kitrbonana',
+          description:
+            'En god friterad wonton med smaker från de värmländska skogarna.',
+          price: 129,
+          ingredients: ['kål', 'morot', 'salladslök'],
+        },
+```
+
+types.ts
+
+```ts
+xport type CartState = {
+...
+  numItemsInCart: number
+  cartTotal: number
+}
+```

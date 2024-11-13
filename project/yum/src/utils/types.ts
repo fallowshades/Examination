@@ -15,8 +15,8 @@ export type CartState = {
   //   id: number
   cartItems: CartItem[]
   //products: CartItem[] (refracture from)
-  //   numItemsInCart: number
-  //   cartTotal: number
+  numItemsInCart: number
+  cartTotal: number
   //   shipping: number
   //   tax: number
   //   orderTotal: number
