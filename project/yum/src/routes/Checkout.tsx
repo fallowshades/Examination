@@ -20,22 +20,22 @@ export const loader =
     const API_KEY = 'fallow'
     try {
       // const response = await customFetch<MenuItemsResponse>(url)
-      const response = await fetch(`${API_URL}${type ? `?type=${type}` : ''}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'x-zocom': API_KEY,
-        },
-      })
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`)
-      }
-      // Parse JSON data
-      const data = await response.json()
-      console.log(data)
-      // Return the response data along with the parameters to pass to the component
-      return { ...data, params }
+      // const response = await fetch(`${API_URL}${type ? `?type=${type}` : ''}`, {
+      //   method: 'GET',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //     'x-zocom': API_KEY,
+      //   },
+      // })
+      // if (!response.ok) {
+      //   throw new Error(`Error: ${response.statusText}`)
+      // }
+      // // Parse JSON data
+      // const data = await response.json()
+      // console.log(data)
+      // // Return the response data along with the parameters to pass to the component
+      // return { ...data, params }
       // return { ...response.data, params }
       return true
     } catch (error) {
@@ -74,9 +74,40 @@ export const loader =
       } // Return null or some error data
     }
   }
-
+import CartItemsList from '@/components/CartItemsList'
+import CartTotals from '@/components/CartTotals'
+import { Link } from 'react-router-dom'
+import { useAppSelector } from '@/lib/hooks'
 const Checkout = () => {
-  return <div>Checkout</div>
+  const tenentName = useAppSelector((state) => state.tenantState.id) || 0
+
+  return (
+    <>
+      <div className='mt-8 grid gap-8  lg:grid-cols-12'>
+        <div className='lg:col-span-8'>
+          <CartItemsList />
+        </div>
+        <div className='lg:col-span-4 lg:pl-4'>
+          <CartTotals />
+          {tenentName ? (
+            <Link
+              to='/dashboard/checkout'
+              className='btn btn-primary btn-block mt-8'
+            >
+              Proceed to checkout
+            </Link>
+          ) : (
+            <Link
+              to='/login-interior'
+              className='btn btn-primary btn-block mt-8'
+            >
+              on boarding
+            </Link>
+          )}
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default Checkout

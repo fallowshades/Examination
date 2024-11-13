@@ -1228,3 +1228,282 @@ xport type CartState = {
   cartTotal: number
 }
 ```
+
+#### cart setup
+
+App.tsx
+
+```tsx
+ path: 'checkout/:id',
+```
+
+CartItem.tsx
+
+```tsx
+import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { addItem, removeItem } from '@/lib/features/menu'
+const CartItem = ({ cartItem }: any) => {
+  const { cartID, title, price, amount } = cartItem
+  return (
+    <article className='cart-item'>
+      <div>
+        <h5>{title}</h5>
+        <span className='item-price'>${price}</span>
+        {/* remove button */}
+      </div>
+      <div>
+        {/* increase amount */}
+        <button
+          className='amount-btn'
+          onClick={() => addItem(cartID)}
+        >
+          <FaChevronUp className='amount-icon' />
+        </button>
+        {/* amount */}
+        <span className='amount'>{amount}</span>
+        {/* decrease amount */}
+        <button
+          className='amount-btn'
+          onClick={() => removeItem(cartID)}
+        >
+          <FaChevronDown className='amount-icon' />
+        </button>
+      </div>
+    </article>
+  )
+}
+
+export default CartItem
+```
+
+CartItemsList.tsx
+
+```tsx
+import { useAppSelector } from '@/lib/hooks'
+import CartItem from './CartItem'
+const CartItemsList = () => {
+  const cartItems = useAppSelector((state) => state.menuState.cartItems)
+  if (cartItems.length === 0) {
+    return (
+      <section className='cart'>
+        {/* cart header */}
+        <header>
+          <h2>your bag</h2>
+          <h4 className='empty-cart'>is currently empty</h4>
+        </header>
+      </section>
+    )
+  }
+  return (
+    <section className='cart'>
+      {/* cart header */}
+      <header>
+        <h2>your bag</h2>
+      </header>
+      {/* cart items */}
+      <div>
+        {cartItems.map((item) => {
+          return (
+            <CartItem
+              key={item.cartID}
+              cartItem={item}
+            />
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+export default CartItemsList
+```
+
+CartTotals.tsx
+
+```tsx
+import { useAppSelector } from '@/lib/hooks'
+const CartTotals = () => {
+  const totalCost = useAppSelector((state) => state.menuState.cartTotal)
+
+  return (
+    <footer>
+      <hr />
+      <div>
+        <h5 className='cart-total'>
+          total <span>${totalCost.toFixed(2)}</span>
+        </h5>
+      </div>
+    </footer>
+  )
+}
+
+export default CartTotals
+```
+
+Navbar.tsx
+
+```tsx
+  const tenentName = useAppSelector((state) => state.tenantState.id) || 0
+
+
+<Link
+        to={`checkout/${tenentName}`}
+        className='cart-container'
+      >
+    ...
+      </Link>
+```
+
+index.css
+
+```css
+/*
+=============== 
+Cart
+===============
+*/
+.cart {
+  min-height: calc(100vh - 4rem);
+  width: var(--view-width);
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 2.5rem 0;
+  max-width: var(--fixed-width);
+}
+.cart h2 {
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.empty-cart {
+  text-transform: lowercase;
+  color: var(--grey-500);
+  margin-top: 1rem;
+  text-align: center;
+}
+hr {
+  background: var(--grey-300);
+  border-color: transparent;
+  border-width: 1px;
+  margin-bottom: 1rem;
+}
+.cart footer {
+  margin-top: 5rem;
+  text-align: center;
+}
+.cart-total {
+  text-transform: capitalize;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.cart-total span {
+  background: var(--primary-500);
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--borderRadius);
+  color: var(--white);
+}
+
+/*
+=============== 
+Cart Item
+===============
+*/
+.cart-item {
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  grid-column-gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.cart-item img {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+}
+.cart-item h5 {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--grey-700);
+}
+.item-price {
+  color: var(--grey-500);
+  display: block;
+}
+.remove-btn {
+  color: var(--primary-500);
+  letter-spacing: var(--letterSpacing);
+  cursor: pointer;
+  font-size: 0.85rem;
+  background: transparent;
+  border: none;
+  margin-top: 0.375rem;
+  transition: var(--transition);
+}
+.remove-btn:hover {
+  color: var(--primary-600);
+}
+.amount-btn {
+  width: 1.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.amount-icon {
+  font-size: 1.25rem;
+  color: var(--primary-500);
+  transition: var(--transition);
+}
+.amount-icon:hover {
+  color: var(--primary-700);
+}
+.amount {
+  text-align: center;
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: block;
+}
+```
+
+Checkout.tsx
+
+```tsx
+import CartItemsList from '@/components/CartItemsList'
+import CartTotals from '@/components/CartTotals'
+import { Link } from 'react-router-dom'
+import { useAppSelector } from '@/lib/hooks'
+const Checkout = () => {
+  const tenentName = useAppSelector((state) => state.tenantState.id) || 0
+
+  return (
+    <>
+      <div className='mt-8 grid gap-8  lg:grid-cols-12'>
+        <div className='lg:col-span-8'>
+          <CartItemsList />
+        </div>
+        <div className='lg:col-span-4 lg:pl-4'>
+          <CartTotals />
+          {tenentName ? (
+            <Link
+              to='/dashboard/checkout'
+              className='btn btn-primary btn-block mt-8'
+            >
+              Proceed to checkout
+            </Link>
+          ) : (
+            <Link
+              to='/login-interior'
+              className='btn btn-primary btn-block mt-8'
+            >
+              on boarding
+            </Link>
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
+```

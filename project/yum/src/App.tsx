@@ -19,7 +19,7 @@ const router = createBrowserRouter([
         loader: MenuLoader(store),
       },
       {
-        path: 'checkout:id',
+        path: 'checkout/:id',
         element: <Checkout />,
         loader: CheckoutLoader(store),
       },
