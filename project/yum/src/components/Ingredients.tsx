@@ -1,4 +1,15 @@
 const Ingredients = ({ ingredientItem, endOfArray, type, addToCart }: any) => {
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Toggle style directly on the clicked element
+    const target = event.currentTarget
+    target.style.backgroundColor =
+      target.style.backgroundColor === 'green' ? '' : 'green'
+    target.style.border =
+      target.style.border === '2px solid darkgreen' ? '' : '2px solid darkgreen'
+
+    addToCart() // Call your function when clicked
+  }
+
   return (
     <span>
       {type == 'wonton' ? (
@@ -11,7 +22,9 @@ const Ingredients = ({ ingredientItem, endOfArray, type, addToCart }: any) => {
         // For wonton items, display ingredient as a button
         <button
           className='btn'
-          onClick={addToCart}
+          onClick={(e) => {
+            handleButtonClick(e)
+          }}
         >
           {ingredientItem}
           {!endOfArray && ','}

@@ -1053,3 +1053,47 @@ const SharedCardLayout = ({ items, type }: GroupedMenuItems) => {
 
 export default SharedCardLayout
 ```
+
+#### style obj postfix for interaction in layout and buttons
+
+Ingredients.tsx
+
+- can useState or set style post click
+
+```tsx
+  const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Toggle style directly on the clicked element
+    const target = event.currentTarget
+    target.style.backgroundColor =
+      target.style.backgroundColor === 'green' ? '' : 'green'
+    target.style.border =
+      target.style.border === '2px solid darkgreen' ? '' : '2px solid darkgreen'
+
+    addToCart() // Call your function when clicked
+  }
+
+   onClick={(e) => {
+            handleButtonClick(e)
+          }}
+```
+
+SharedCardLayout.tsx
+
+- not style should be around the whole item (can move all type conditions in AharedCardLayout)
+
+```tsx
+  //define outside
+        const itemStyle =
+          type === 'wonton'
+            ? {
+                backgroundColor: clicked ? 'green' : '',
+                border: clicked ? '2px solid darkgreen' : '',
+              }
+            : {}
+ return (
+          <div
+            key={item.id}
+
+            style={itemStyle}
+           >...
+```

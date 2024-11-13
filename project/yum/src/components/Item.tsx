@@ -14,8 +14,6 @@ const Item = ({
   clicked: any
   setClicked: any
 }) => {
-  console.log('item', item)
-
   const dispatch = useAppDispatch()
   const menuProduct: CartItem = {
     cartID: String(item.id),
@@ -44,7 +42,6 @@ const Item = ({
       </div>
       <div className='ingredients-container'>
         {(options || item?.ingredients)?.map((ingredientItem, index) => {
-          console.log(index)
           return (
             <Ingredients
               key={index}

@@ -4,17 +4,24 @@ import { useState } from 'react'
 
 const SharedCardLayout = ({ items, type }: GroupedMenuItems) => {
   const [clicked, setClicked] = useState(false)
+
   return (
     <div>
       {items.map((item) => {
         const lazyBackendQuickFix = items.map((item) => item.name)
+        //define outside
+        const itemStyle =
+          type === 'wonton'
+            ? {
+                backgroundColor: clicked ? 'green' : '',
+                border: clicked ? '2px solid darkgreen' : '',
+              }
+            : {}
+
         return (
           <div
             key={item.id}
-            style={{
-              backgroundColor: clicked ? 'green' : '', // Example: change color when clicked
-              border: clicked ? '2px solid darkgreen' : '', // Border change to indicate activation
-            }}
+            style={itemStyle}
             className={`menu ${type == 'wonton' && 'menuEffect'}`}
           >
             {type == 'wonton' ? (
