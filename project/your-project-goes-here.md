@@ -1508,7 +1508,7 @@ const Checkout = () => {
 }
 ```
 
-####
+#### incrememt decrement reducer
 
 CartItem.tsx
 
@@ -1638,4 +1638,223 @@ types.ts
   ...
 }
 } & { title: string }
+```
+
+#### css and action differences between pages
+
+index.html
+
+```html
+<body class="primary-theme"></body>
+```
+
+App.tsx
+
+```tsx
+import { action as CheckoutAction } from '@/routes/CheckoutAction'
+
+      path: 'checkout-action',
+        action: CheckoutAction(store),
+        element: <div>h</div>,
+      },
+```
+
+CartTotal.tsx
+
+```tsx
+<button>
+  {' '}
+  <span>${totalCost.toFixed(2)}</span> total
+</button>
+```
+
+Item.tsx
+
+```tsx
+import { useState } from 'react'
+
+  const checkDefaultTheme = () => {
+    const isDefaultPath = location.pathname !== '/'
+
+    return isDefaultPath
+  }
+
+  const [NotPrimaryTheme, setTheme] = useState(checkDefaultTheme())
+
+  <header className={`item-info ${checkDefaultTheme() && 'black'}`}>
+```
+
+index.css
+
+- body theme exist a [] but we prefere tailwind
+
+```css
+body {
+  background: var(--ash);
+  color: var(--clr-black);
+}
+
+.primary-theme {
+  font-family: var(--ff-secondary);
+  background: var(--dark-mint);
+  color: var(--ash);
+}
+
+.secondary-theme {
+  font-family: var(--ff-secondary);
+  background: var(--clay);
+  color: var(--white);
+}
+```
+
+- basically tailwind (dots has other default color)
+
+```css
+.item-info.black p {
+  border-bottom-color: var(--clr-black);
+}
+
+button.black {
+  background-color: #222;
+  color: white;
+}
+```
+
+- special button
+
+```css
+.white {
+  background-color: var(--ash);
+}
+
+.cart-total button {
+  text-transform: capitalize;
+  padding: 0.5rem 1rem; /* Add padding for better button appearance */
+  display: flex;
+  align-items: center; /* Center text inside the button */
+  justify-content: center; /* Center text inside the button */
+  margin: 0 auto; /* Center the button horizontally */
+}
+```
+
+apiKeySlice.tsx
+
+```tsx
+const getApiKeyFromLocalStorage = (): ApiKeyState => {
+...
+  const apiKey = localStorage.getItem('api-key')
+...
+}
+```
+
+Checkout.tsx
+
+- set up action in another page
+
+```tsx
+import { Link, Form } from 'react-router-dom'
+;<Form
+  method='post'
+  action={`../checkout-action`}
+>
+  <button
+    type='submit'
+    className='btn delete-btn black'
+  >
+    Take my money
+  </button>
+</Form>
+```
+
+CheckoutAcction.tsx
+
+- send orders
+
+```tsx
+import { redirect, type ActionFunction } from 'react-router-dom'
+import customFetch from '@/utils/customFetch'
+
+//import { type QueryClient } from '@tanstack/react-query'
+
+import { ReduxStore } from '@/lib/store'
+import { AxiosResponse, AxiosError } from 'axios'
+
+export const action =
+  (store: ReduxStore): ActionFunction =>
+  async ({ request }) => {
+    const { cartItems } = store.getState().menuState
+
+    const info = {
+      items: cartItems,
+    }
+    try {
+      const settings = {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+          'x-zocom': 'yum-7BTxHCyHhzI',
+        },
+      }
+      const tenant = 'a2f4'
+      const response: Response = await fetch(
+        `https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com/${tenant}/orders`,
+        settings
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const data = await response.json()
+      console.log('menu', data)
+
+      return redirect('/receipts')
+    } catch (error) {
+      console.log(error)
+      let errorMessage = 'There was an error placing your order'
+      if (error instanceof AxiosError) {
+        errorMessage = error?.response?.data?.error?.message || errorMessage
+      }
+      return null
+    }
+  }
+```
+
+Layout.tsx
+
+- on every window.location use reusable function
+
+```tsx
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+const Layout = () => {
+
+   const location = useLocation()
+
+  const checkDefaultTheme = () => {
+    const isDefaultPath = location.pathname === '/'
+    //const primaryTheme = localStorage.getItem('theme') === 'true'
+
+    if (isDefaultPath) {
+      document.body.classList.toggle('primary-theme')
+      document.body.classList.remove('secondary-theme')
+    } else if (location.pathname.startsWith('/checkout/')) {
+      document.body.classList.remove('secondary-theme')
+      document.body.classList.remove('primary-theme')
+    } else if (location.pathname.startsWith('/receipt')) {
+      document.body.classList.add('secondary-theme')
+      document.body.classList.remove('primary-theme')
+    }
+
+    // return primaryTheme
+  }
+
+  const [sePrimaryTheme, setTheme] = useState(checkDefaultTheme())
+
+  useEffect(() => {
+    checkDefaultTheme()
+  }, [location.pathname])
+
+
+...
+}
 ```

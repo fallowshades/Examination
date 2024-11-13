@@ -19,25 +19,25 @@ export const loader =
     ])
 
     try {
-      //   const apiKey = store.getState().apiState.apiKey
-      //   const subdomain = '9oxx' //|| window.location.hostname.split('.')[0] //C:\Windows\System32\drivers\etc\hosts // local dev env.
-      //   const tenant = store.getState().tenantState.name || subdomain
-      //   console.log(apiKey, tenant)
-      //   //   const headers: Headers = new AxiosHeaders({
-      //   //     Authorization: `Bearer ${apiKey}`,
-      //   //     'Content-Type': 'application/json',
-      //   //   })
+      // const apiKey = 'yum-7BTxHCyHhzI' //store.getState().apiState.apiKey
+      // const subdomain = 'a2f4' //|| window.location.hostname.split('.')[0] //C:\Windows\System32\drivers\etc\hosts // local dev env.
+      // const tenant = store.getState().tenantState.name || subdomain
+      // console.log(apiKey, tenant)
+      //   const headers: Headers = new AxiosHeaders({
+      //     Authorization: `Bearer ${apiKey}`,
+      //     'Content-Type': 'application/json',
+      //   })
 
-      //   // Initialize AxiosHeaders
-      //   const headers = new AxiosHeaders()
+      // // Initialize AxiosHeaders
+      // const headers = new AxiosHeaders()
 
-      //   // Set common headers
-      //   headers.set('Authorization', `Bearer ${apiKey}`)
-      //   headers.set('Content-Type', 'application/json')
-      //   // {
-      //   //         Authorization: `Bearer ${apiKey}`, // Include the API key in the Authorization header
-      //   //         'Content-Type': 'application/json',
-      //   //       }
+      // // Set common headers
+      // headers.set('Authorization', `Bearer ${apiKey}`)
+      // headers.set('Content-Type', 'application/json')
+      // // {
+      //         Authorization: `Bearer ${apiKey}`, // Include the API key in the Authorization header
+      //         'Content-Type': 'application/json',
+      //       }
 
       //   // If the tenant is required in headers, you can add it as well
       //   if (tenant) {
@@ -49,7 +49,7 @@ export const loader =
       //     //type obj instead of obj literals in arguments
       //     headers,
       //   }
-      const params = { type: 'wonton' } // Example body data, adjust as needed
+      // const params = { type: 'wonton' } // Example body data, adjust as needed
       //const { data } = await customFetch.post('/menu', params)
       // .then((response) => {
       //   console.log('Menu:', response.data)
@@ -62,49 +62,25 @@ export const loader =
       // Return the response data along with the parameters to pass to the component
       //return { ...data, params }
       //   // return { ...response.data, params }
-      return [
-        {
-          id: 1,
-          type: 'wonton',
-          name: 'Karlstad',
-          description:
-            'En god friterad wonton med smaker från de värmländska skogarna.',
-          price: 129,
-          ingredients: ['kål', 'morot', 'salladslök'],
+      const settings = {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json',
+          'x-zocom': 'yum-7BTxHCyHhzI',
         },
-        {
-          id: 2,
-          type: 'wonton',
-          name: 'lala',
-          description:
-            'En god friterad wonton med smaker från de värmländska skogarna.',
-          price: 129,
-          ingredients: ['kål', 'morot', 'salladslök'],
-        },
-        {
-          id: 3,
-          type: 'wonton',
-          name: 'kitrbonana',
-          description:
-            'En god friterad wonton med smaker från de värmländska skogarna.',
-          price: 129,
-          ingredients: ['kål', 'morot', 'salladslök'],
-        },
-        {
-          id: 12,
-          type: 'dip',
-          name: 'Chili Mayo',
-          description: 'Egengjord majonäs smaksatt med chili.',
-          price: 129,
-        },
-        {
-          id: 15,
-          type: 'drink',
-          name: 'Sprite',
-          description: 'Drink ipsum dolor fizzy, fruity & Sweet...',
-          price: 19,
-        },
-      ]
+      }
+
+      const response: Response = await fetch(
+        'https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com/menu',
+        settings
+      )
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`)
+      }
+      const data = await response.json()
+      console.log('menu', data)
+      return { data }
     } catch (error) {
       console.error('Error fetching menu:', error)
       return null // Return null or some error data
@@ -116,12 +92,12 @@ import SharedCardLayout from '@/components/SharedCardLayout'
 // import { transformData } from '@/utils/transformations'
 
 const Menu = () => {
-  const data = useLoaderData() as MenuItem[]
-
+  const { data } = useLoaderData() as { data: { items: MenuItem[] } }
+  console.log('menu', data)
   // Combine all items into one array
   const allItems = ['wonton', 'dip', 'drink'].map((type) => ({
     type,
-    items: data.filter((item) => item.type === type),
+    items: data.items.filter((item) => item.type === type),
   }))
 
   return (

@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout, { loader as layoutLoader } from './routes/Layout'
 import { store } from './lib/store'
 import NoMatch from './routes/NoMatch'
+import { action as CheckoutAction } from '@/routes/CheckoutAction'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -22,11 +24,17 @@ const router = createBrowserRouter([
         path: 'checkout/:id',
         element: <Checkout />,
         loader: CheckoutLoader(store),
+        action: CheckoutAction(store),
       },
       {
         path: 'receipts',
         element: <Receipts />,
         loader: ReceiptsLoader(store),
+      },
+      {
+        path: 'checkout-action',
+        action: CheckoutAction(store),
+        element: <div>h</div>,
       },
       {
         path: '*', // Catch-all route

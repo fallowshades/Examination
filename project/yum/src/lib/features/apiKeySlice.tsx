@@ -11,7 +11,7 @@ const initialApiKeyState: ApiKeyState = {
 }
 
 const getApiKeyFromLocalStorage = (): ApiKeyState => {
-  const apiKey = localStorage.getItem('tenant')
+  const apiKey = localStorage.getItem('api-key')
   return apiKey ? JSON.parse(apiKey) : initialApiKeyState
 }
 
@@ -21,12 +21,12 @@ const apiKeySlice = createSlice({
   reducers: {
     setApiKey(state, action: PayloadAction<string>) {
       state.apiKey = action.payload
-      localStorage.setItem('tenant', JSON.stringify(state))
+      localStorage.setItem('api-key', JSON.stringify(state))
     },
 
     clearApiKey(state) {
       // state.apiKey = null
-      localStorage.setItem('tenant', JSON.stringify(initialApiKeyState))
+      localStorage.setItem('api-key', JSON.stringify(initialApiKeyState))
       return initialApiKeyState
     },
   },

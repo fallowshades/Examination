@@ -7,7 +7,10 @@ const CartTotals = () => {
       <hr />
       <div>
         <h5 className='cart-total'>
-          total <span>${totalCost.toFixed(2)}</span>
+          <button>
+            {' '}
+            <span>${totalCost.toFixed(2)}</span> total
+          </button>
         </h5>
       </div>
     </footer>

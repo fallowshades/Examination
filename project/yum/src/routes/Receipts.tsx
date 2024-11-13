@@ -44,8 +44,43 @@ export const loader =
     }
   }
 
+import { Link, Form } from 'react-router-dom'
+import { useAppSelector } from '@/lib/hooks'
 const Receipts = () => {
-  return <div>Receipts</div>
+  const tenentName = useAppSelector((state) => state.tenantState.id) || 0
+
+  return (
+    <>
+      <div className='mt-8 grid gap-8  lg:grid-cols-12 '>
+        <div className='lg:col-span-8'>
+          <p>f</p>
+        </div>
+        <div className='lg:col-span-4 lg:pl-4'>
+          <button className='btn'>lf</button>
+          {tenentName ? (
+            <Link
+              to='/dashboard/checkout'
+              className='btn btn-primary btn-block mt-8'
+            >
+              Proceed to checkout
+            </Link>
+          ) : (
+            <Form
+              method='post'
+              action={`../checkout-action`}
+            >
+              <button
+                type='submit'
+                className='btn delete-btn black'
+              >
+                gör en ny beställning
+              </button>
+            </Form>
+          )}
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default Receipts

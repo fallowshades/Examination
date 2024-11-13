@@ -9,4 +9,12 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://fdnzawlcf6.execute-api.eu-north-1.amazonaws.com',
+        changeOrigin: true,
+      },
+    },
+  },
 })

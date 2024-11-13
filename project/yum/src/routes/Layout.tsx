@@ -20,7 +20,9 @@ export const loader =
     try {
       console.log('layout loader')
       const apiKey = store.getState().apiState.apiKey
+      console.log('api key', apiKey)
       if (!apiKey) {
+        //!apiKey
         console.log('api key', apiKey)
         const { data } = await customFetch.post('/keys') //should crud manage, post is basically get
         //yum-7BTxHCyHhzIME5TI
@@ -30,16 +32,16 @@ export const loader =
       }
       //ONboarding
       //1. multi-tenant application, single-tenannt application, session-based tenant creation
-      const tenant = store.getState().tenantState.id
-      if (!tenant) {
-        console.log('tenant', tenant)
-        const params = { name: 'erik.jonsson@chassacademy.se' }
-        //const { data } = await customFetch.post('/tenants', params) //no need batch
-        // //console.log(data)
-        // if (data?.key) {
-        //   store.dispatch(setTenant({ name: data.name, id: data.id }))
-        // }
-      }
+      // const tenant = store.getState().tenantState.id
+      // if (!tenant) {
+      //   console.log('tenant', tenant)
+      //   const body = { name: 'erik.jonsson@chassacademy.se' }
+      //   const { data } = await customFetch.post('/tenants', body) //no need batch
+      //   //console.log(data)
+      //   if (data?.key) {
+      //     store.dispatch(setTenant({ name: data.name, id: data.id }))
+      //   }
+      // }
       //200,401,404, need access key
 
       return null
@@ -49,7 +51,8 @@ export const loader =
     }
   }
 const DashboardContext = createContext(undefined)
-
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 //import { useEffect } from 'react'
 const Layout = () => {
   //   useEffect(() => {
@@ -73,6 +76,32 @@ const Layout = () => {
   const isPageLoading = navigation.state === 'loading'
 
   const tenants = useLoaderData()
+
+  const location = useLocation()
+
+  const checkDefaultTheme = () => {
+    const isDefaultPath = location.pathname === '/'
+    //const primaryTheme = localStorage.getItem('theme') === 'true'
+
+    if (isDefaultPath) {
+      document.body.classList.toggle('primary-theme')
+      document.body.classList.remove('secondary-theme')
+    } else if (location.pathname.startsWith('/checkout/')) {
+      document.body.classList.remove('secondary-theme')
+      document.body.classList.remove('primary-theme')
+    } else if (location.pathname.startsWith('/receipt')) {
+      document.body.classList.add('secondary-theme')
+      document.body.classList.remove('primary-theme')
+    }
+
+    // return primaryTheme
+  }
+
+  const [sePrimaryTheme, setTheme] = useState(checkDefaultTheme())
+
+  useEffect(() => {
+    checkDefaultTheme()
+  }, [location.pathname])
 
   return (
     <DashboardContext.Provider value={undefined}>

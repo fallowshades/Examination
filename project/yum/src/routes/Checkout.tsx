@@ -76,14 +76,14 @@ export const loader =
   }
 import CartItemsList from '@/components/CartItemsList'
 import CartTotals from '@/components/CartTotals'
-import { Link } from 'react-router-dom'
+import { Link, Form } from 'react-router-dom'
 import { useAppSelector } from '@/lib/hooks'
 const Checkout = () => {
   const tenentName = useAppSelector((state) => state.tenantState.id) || 0
 
   return (
     <>
-      <div className='mt-8 grid gap-8  lg:grid-cols-12'>
+      <div className='mt-8 grid gap-8  lg:grid-cols-12 '>
         <div className='lg:col-span-8'>
           <CartItemsList />
         </div>
@@ -97,12 +97,17 @@ const Checkout = () => {
               Proceed to checkout
             </Link>
           ) : (
-            <Link
-              to='/login-interior'
-              className='btn btn-primary btn-block mt-8'
+            <Form
+              method='post'
+              action={`../checkout-action`}
             >
-              on boarding
-            </Link>
+              <button
+                type='submit'
+                className='btn delete-btn black'
+              >
+                Take my money
+              </button>
+            </Form>
           )}
         </div>
       </div>

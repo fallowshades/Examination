@@ -3,6 +3,7 @@ import Ingredients from './Ingredients'
 import { useAppDispatch } from '@/lib/hooks'
 import { CartItem } from '@/utils/types'
 import { addItem } from '@/lib/features/menu'
+import { useState } from 'react'
 const Item = ({
   item,
   options,
@@ -31,11 +32,19 @@ const Item = ({
     }
   }
 
+  const checkDefaultTheme = () => {
+    const isDefaultPath = location.pathname !== '/'
+
+    return isDefaultPath
+  }
+
+  const [NotPrimaryTheme, setTheme] = useState(checkDefaultTheme())
+
   return (
     <div onClick={() => !options && addToCart()}>
       {' '}
       <div>
-        <header className='item-info'>
+        <header className={`item-info ${checkDefaultTheme() && 'black'}`}>
           <h3> {options ? item.type : item.name || item.title}</h3>
 
           <p></p>
