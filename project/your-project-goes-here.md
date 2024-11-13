@@ -768,7 +768,7 @@ const Ingredients = ({ ingredientItem, endOfArray, type }: any) => {
 export default Ingredients
 ```
 
-####
+#### hover and nav effect
 
 Navbar.tsx
 
@@ -839,7 +839,7 @@ Menu.tsx
       <div className=''>
 ```
 
-####
+#### map extra copies w conditional add rule (body,button)
 
 Ingredients.tsx
 
@@ -886,4 +886,170 @@ Menu.tsx
                   key={item.id}
                   className='menu'
                   className={`menu ${type == 'wonton' && 'menuEffect'}`}
+```
+
+#### add to cart
+
+Ingredients.tsx
+
+```tsx
+const Ingredients = ({ ingredientItem, endOfArray, type, addToCart }: any) => {
+
+  {type == 'wonton' ? (
+      ) : (
+
+        <button
+          className='btn'
+          onClick={addToCart}
+        >)
+  }
+}
+```
+
+Item.tsx
+
+```tsx
+import { useAppDispatch } from '@/lib/hooks'
+import { CartItem } from '@/utils/types'
+import { addItem } from '@/lib/features/menu'
+const Item = ({
+  item,
+  options,
+  clicked,
+  setClicked,
+}: {
+  item: MenuItem
+  options?: string[]
+  clicked: any
+  setClicked: any
+}) => {
+  console.log('item', item)
+
+  const dispatch = useAppDispatch()
+  const menuProduct: CartItem = {
+    cartID: String(item.id),
+    productID: item.id,
+    title: item.name,
+    price: String(item.price),
+    amount: 1,
+  }
+
+  const addToCart = () => {
+    console.log('clicked')
+    dispatch(addItem(menuProduct))
+    setClicked(!clicked)
+  }
+
+  return(
+   <div onClick={() => !options && addToCart()}>
+      {' '}
+        <h3> {options == null ? item.type : item.name}</h3>
+...
+ {(options || item?.ingredients)?.map((ingredientItem, index) => {
+          console.log(index)
+          return (
+            <Ingredients
+              key={index}
+              type={item.type}
+              ingredientItem={ingredientItem}
+              endOfArray={item?.ingredients?.length - 1 == index}
+              addToCart={addToCart}
+            />
+          )
+        })}
+  )
+```
+
+index.css
+
+```css
+p {
+  border: 1px solid var(--clr-grey-8);
+}
+```
+
+hooks.ts
+
+```ts
+import { useDispatch, useSelector } from 'react-redux'
+import type { TypedUseSelectorHook } from 'react-redux'
+import type { RootState, AppDispatch } from './store'
+
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch: () => AppDispatch = useDispatch
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
+```
+
+#### highlight
+
+types.ts
+
+```ts
+export type GroupedMenuItems = {
+  type: string
+  items: MenuItem[]
+}
+```
+
+Menu.tsx
+
+-
+
+```tsx
+import SharedCardLayout from '@/components/SharedCardLayout'
+
+return (
+  <section className=''>
+    <SharedCardLayout
+      items={items}
+      type={type}
+    />
+  </section>
+)
+```
+
+SharedCardLayout.tsx
+
+```tsx
+import Item from '@/components/Item'
+import { GroupedMenuItems } from '@/utils/types'
+import { useState } from 'react'
+
+const SharedCardLayout = ({ items, type }: GroupedMenuItems) => {
+  const [clicked, setClicked] = useState(false)
+  return (
+    <div>
+      {items.map((item) => {
+        const lazyBackendQuickFix = items.map((item) => item.name)
+        return (
+          <div
+            key={item.id}
+            style={{
+              backgroundColor: clicked ? 'green' : '', // Example: change color when clicked
+              border: clicked ? '2px solid darkgreen' : '', // Border change to indicate activation
+            }}
+            className={`menu ${type == 'wonton' && 'menuEffect'}`}
+          >
+            {type == 'wonton' ? (
+              <Item
+                item={item}
+                clicked={clicked}
+                setClicked={setClicked}
+              />
+            ) : (
+              <Item
+                item={item}
+                options={lazyBackendQuickFix}
+                clicked={clicked}
+                setClicked={setClicked}
+              />
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+export default SharedCardLayout
 ```

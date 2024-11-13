@@ -1,12 +1,10 @@
 export type CartItem = {
   cartID: string
   productID: number
-  image: string
+
   title: string
   price: string
   amount: number
-  productColor: string
-  company: string
 }
 
 export type MappedCartItem = {
@@ -32,6 +30,11 @@ export type MenuItem = {
   description: string
   price: number
   ingredients: string[]
+}
+
+export type GroupedMenuItems = {
+  type: string
+  items: MenuItem[]
 }
 
 export type Orders = {
