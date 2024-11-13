@@ -1858,3 +1858,95 @@ const Layout = () => {
 ...
 }
 ```
+
+#### finishing touch
+
+Receipts.tsx
+
+- move imgages to public
+
+```tsx
+<div className=''>
+  <div className='image-container'>
+    <img
+      src='/assets/boxtop.png'
+      alt=''
+      className='img'
+    />
+  </div>
+  <h1>Dina wontons tillagas</h1>
+  <p>Eta 5 min</p>
+</div>
+```
+
+SharedCardLayout.tsx
+
+```tsx
+{
+  items.map((item, index) => {
+    if (type != 'wonton' && index == 0) {
+      return (
+        <DistinctCardLayout
+          key={item.id}
+          item={item}
+          type={type}
+          lazyBackendQuickFix={lazyBackendQuickFix}
+        />
+      )
+    } else {
+      if (type == 'wonton') {
+        return (
+          <DistinctCardLayout
+            key={item.id}
+            item={item}
+            type={type}
+            lazyBackendQuickFix={lazyBackendQuickFix}
+          />
+        )
+        return <></>
+      }
+    }
+  })
+}
+```
+
+index.css
+
+```css
+h1 {
+  color: var(--ash);
+}
+```
+
+Receipts.tsx
+
+```tsx
+export const loader =
+  (store: ReduxStore): LoaderFunction =>
+  async ({ request }: { request: Request }) => {
+  return null
+  }
+
+const Receipts = () => {
+  return (
+    <>
+      <div className='mt-8 grid gap-8  lg:grid-cols-12 '>
+        <div className='lg:col-span-8'>
+
+        <div className=''>
+          <div className='image-container'>
+            <img
+              src='/assets/boxtop.png'
+              alt=''
+              className='img'
+            />
+          </div>
+          <h1>Dina wontons tillagas</h1>
+          <p>Eta 5 min</p>
+        </div>
+        <div className='lg:col-span-4 lg:pl-4'>
+          <button className='btn'>lf</button>
+          <button className='btn'>Se Kvitto</button>
+
+  )}
+```
