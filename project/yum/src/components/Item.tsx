@@ -11,8 +11,8 @@ const Item = ({
 }: {
   item: MenuItem
   options?: string[]
-  clicked: any
-  setClicked: any
+  clicked?: any
+  setClicked?: any
 }) => {
   const dispatch = useAppDispatch()
   const menuProduct: CartItem = {
@@ -25,8 +25,10 @@ const Item = ({
 
   const addToCart = () => {
     console.log('clicked')
-    dispatch(addItem(menuProduct))
-    setClicked(!clicked)
+    if (setClicked) {
+      dispatch(addItem(menuProduct))
+      setClicked(!clicked)
+    }
   }
 
   return (
@@ -34,7 +36,7 @@ const Item = ({
       {' '}
       <div>
         <header className='item-info'>
-          <h3> {options ? item.type : item.name}</h3>
+          <h3> {options ? item.type : item.name || item.title}</h3>
 
           <p></p>
           <h3>{item.price}SEK</h3>

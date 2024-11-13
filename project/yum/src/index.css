@@ -372,17 +372,10 @@ Cart Item
 ===============
 */
 .cart-item {
-  display: grid;
-  align-items: center;
-  grid-template-columns: auto 1fr auto;
   grid-column-gap: 1.5rem;
   margin: 1.5rem 0;
 }
-.cart-item img {
-  width: 5rem;
-  height: 5rem;
-  object-fit: cover;
-}
+
 .cart-item h5 {
   margin-bottom: 0.5rem;
   font-weight: 500;
@@ -406,7 +399,12 @@ Cart Item
 .remove-btn:hover {
   color: var(--primary-600);
 }
+
+.amount-container {
+  display: flex;
+}
 .amount-btn {
+  display: flex;
   width: 1.5rem;
   background: transparent;
   border: none;

@@ -1240,7 +1240,7 @@ App.tsx
 CartItem.tsx
 
 ```tsx
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa'
+import { FaChevron, FaChevronDown } from 'react-icons/fa'
 import { addItem, removeItem } from '@/lib/features/menu'
 const CartItem = ({ cartItem }: any) => {
   const { cartID, title, price, amount } = cartItem
@@ -1506,4 +1506,136 @@ const Checkout = () => {
     </>
   )
 }
+```
+
+####
+
+CartItem.tsx
+
+```tsx
+import Item from './Item'
+import { AiTwotonePlusCircle, AiTwotoneMinusCircle } from 'react-icons/ai'
+import { handleItemQuantityChange } from '@/lib/features/menu'
+import { useAppDispatch } from '@/lib/hooks'
+const CartItem = ({ cartItem }: any) => {
+
+onst dispatch = useAppDispatch()
+
+  const handleIncrement = () => {
+    console.log('increment')
+    dispatch(
+      handleItemQuantityChange({ cartID: cartID, changeType: 'increment' })
+    ) // Ensure dispatch is called correctly
+  }
+
+  const handleDecrement = () => {
+    console.log('decrement')
+    dispatch(
+      handleItemQuantityChange({ cartID: cartID, changeType: 'decrement' })
+    ) // Ensure dispatch is called correctly
+  }
+
+  return (
+     <div>
+        <Item item={cartItem}></Item>
+
+
+      </div>
+    <div className='amount-container'>
+  )
+
+}
+```
+
+CartItemsList.tsx
+
+- multiple cart items with the same cartID appearently
+
+```tsx
+ {cartItems.map((item, index) => {
+          return (
+            <CartItem
+
+              key={item.cartID + index}
+```
+
+Item.tsx
+
+- share item with cart that do not have a layout click
+
+```tsx
+}: {
+
+  clicked?: any
+  setClicked?: any
+}) => {
+
+    const addToCart = () => {
+   ...
+    if (setClicked) {
+      dispatch(addItem(menuProduct))
+      setClicked(!clicked)
+    }
+  }
+
+   <h3> {options ? item.type : item.name || item.title}</h3>
+```
+
+index.css
+
+```css
+.amount-container {
+  display: flex;
+}
+.amount-btn {
+  display: flex;
+}
+```
+
+menu.tsx
+
+- annother reducer
+
+```tsx
+handleItemQuantityChange: (
+      state,
+      action: PayloadAction<{
+        cartID: string
+        changeType: 'increment' | 'decrement'
+      }>
+    ) => {
+      const { cartID, changeType } = action.payload
+      const item = state.cartItems.find((i) => i.cartID === cartID)
+      if (!item) return
+
+      const newAmount =
+        changeType === 'increment' ? item.amount + 1 : item.amount - 1
+
+      // Prevent quantity from going below 1
+      if (newAmount < 1) {
+        // If quantity goes to 0, remove the item
+        state.cartItems = state.cartItems.filter((i) => i.cartID !== cartID)
+        state.numItemsInCart -= item.amount
+        state.cartTotal -= Number(item.price) * item.amount
+      } else {
+        // Otherwise, update the item's amount
+        state.numItemsInCart += changeType === 'increment' ? 1 : -1
+        state.cartTotal +=
+          Number(item.price) * (changeType === 'increment' ? 1 : -1)
+        item.amount = newAmount
+      }
+
+      // Recalculate totals after the change
+      menuSlice.caseReducers.calculateTotals(state)
+      localStorage.setItem('menu-tenant', JSON.stringify(state))
+    },
+```
+
+types.ts
+
+```ts
+ export type MenuItem = {
+  ...
+}
+} & { title: string }
 ```

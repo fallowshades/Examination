@@ -21,10 +21,10 @@ const CartItemsList = () => {
       </header>
       {/* cart items */}
       <div>
-        {cartItems.map((item) => {
+        {cartItems.map((item, index) => {
           return (
             <CartItem
-              key={item.cartID}
+              key={item.cartID + index}
               cartItem={item}
             />
           )

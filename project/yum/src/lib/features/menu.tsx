@@ -66,9 +66,71 @@ const menuSlice = createSlice({
       item.amount = amount
       menuSlice.caseReducers.calculateTotals(state)
     },
+    handleItemQuantityChange: (
+      state,
+      action: PayloadAction<{
+        cartID: string
+        changeType: 'increment' | 'decrement'
+      }>
+    ) => {
+      const { cartID, changeType } = action.payload
+      const item = state.cartItems.find((i) => i.cartID === cartID)
+      if (!item) return
+
+      const newAmount =
+        changeType === 'increment' ? item.amount + 1 : item.amount - 1
+
+      // Prevent quantity from going below 1
+      if (newAmount < 1) {
+        // If quantity goes to 0, remove the item
+        state.cartItems = state.cartItems.filter((i) => i.cartID !== cartID)
+        state.numItemsInCart -= item.amount
+        state.cartTotal -= Number(item.price) * item.amount
+      } else {
+        // Otherwise, update the item's amount
+        state.numItemsInCart += changeType === 'increment' ? 1 : -1
+        state.cartTotal +=
+          Number(item.price) * (changeType === 'increment' ? 1 : -1)
+        item.amount = newAmount
+      }
+
+      // Recalculate totals after the change
+      menuSlice.caseReducers.calculateTotals(state)
+      localStorage.setItem('menu-tenant', JSON.stringify(state))
+    },
   },
 })
 
-export const { addItem, removeItem, editItem, clearCart } = menuSlice.actions
+export const {
+  addItem,
+  removeItem,
+  editItem,
+  clearCart,
+  handleItemQuantityChange,
+} = menuSlice.actions
 
 export default menuSlice.reducer
+
+// export const handleItemQuantityChange =
+//   (cartID: string, changeType: 'increment' | 'decrement') =>
+//   (
+//     dispatch: any, // Assuming you have access to `dispatch` here (e.g., in a thunk)
+//     getState: any
+//   ) => {
+//     const state = getState()
+//     console.log(state)
+
+//     const item = state.menu.cartItems.find((i: any) => i.cartID === cartID)
+//     console.log(item)
+
+//     if (!item) return
+//     const newAmount =
+//       changeType === 'increment' ? item.amount + 1 : item.amount - 1
+//     console.log(newAmount)
+//     // Prevent quantity from going below 1
+//     if (newAmount < 1) {
+//       dispatch(removeItem(cartID)) // Removes item if quantity goes to 0
+//     } else {
+//       dispatch(editItem({ cartID, amount: newAmount })) // Updates amount in state
+//     }
+//   }

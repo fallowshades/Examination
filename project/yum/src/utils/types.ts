@@ -30,7 +30,7 @@ export type MenuItem = {
   description: string
   price: number
   ingredients: string[]
-}
+} & { title: string }
 
 export type GroupedMenuItems = {
   type: string
