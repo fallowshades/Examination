@@ -151,7 +151,7 @@ p {
   display: inline-block;
   transition: var(--transition);
   font-size: 0.875rem;
-
+  border: 1px solid var(--clr-grey-8);
   border-radius: var(--radius);
 }
 .btn:hover {

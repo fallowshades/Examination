@@ -1,4 +1,4 @@
-const Ingredients = ({ ingredientItem, endOfArray, type }: any) => {
+const Ingredients = ({ ingredientItem, endOfArray, type, addToCart }: any) => {
   return (
     <span>
       {type == 'wonton' ? (
@@ -9,7 +9,10 @@ const Ingredients = ({ ingredientItem, endOfArray, type }: any) => {
         </span>
       ) : (
         // For wonton items, display ingredient as a button
-        <button className='btn'>
+        <button
+          className='btn'
+          onClick={addToCart}
+        >
           {ingredientItem}
           {!endOfArray && ','}
         </button>

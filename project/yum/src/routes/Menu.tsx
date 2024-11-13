@@ -94,7 +94,7 @@ export const loader =
     return null
   }
 import { MenuItem } from '@/utils/types'
-import Item from '@/components/Item'
+import SharedCardLayout from '@/components/SharedCardLayout'
 // import { transformData } from '@/utils/transformations'
 const Menu = () => {
   const data = useLoaderData() as MenuItem[]
@@ -104,9 +104,7 @@ const Menu = () => {
     type,
     items: data.filter((item) => item.type === type),
   }))
-  console.log(allItems)
-  //   const transformedData = transformData(allItems)
-  //   console.log(transformedData)
+
   return (
     <section className=''>
       <h2 className='item-info'>Menu</h2>
@@ -118,24 +116,10 @@ const Menu = () => {
             className='menu-space'
           >
             {/* <h3>{type.charAt(0).toUpperCase() + type.slice(1)}</h3> */}
-            {items.map((item) => {
-              const lazyBackendQuickFix = items.map((item) => item.name)
-              return (
-                <div
-                  key={item.id}
-                  className={`menu ${type == 'wonton' && 'menuEffect'}`}
-                >
-                  {type == 'wonton' ? (
-                    <Item item={item} />
-                  ) : (
-                    <Item
-                      item={item}
-                      options={lazyBackendQuickFix}
-                    />
-                  )}
-                </div>
-              )
-            })}
+            <SharedCardLayout
+              items={items}
+              type={type}
+            />
           </div>
         ))}
       </div>
