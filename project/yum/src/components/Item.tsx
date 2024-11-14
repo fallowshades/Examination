@@ -4,17 +4,19 @@ import { useAppDispatch } from '@/lib/hooks'
 import { CartItem } from '@/utils/types'
 import { addItem } from '@/lib/features/menu'
 import { useState } from 'react'
+
+export type ClickInternalHeaderDependence = {
+  item: MenuItem
+  options?: string[]
+  clicked?: boolean
+  setClicked?: (value: boolean) => void
+}
 const Item = ({
   item,
   options,
   clicked,
   setClicked,
-}: {
-  item: MenuItem
-  options?: string[]
-  clicked?: any
-  setClicked?: any
-}) => {
+}: ClickInternalHeaderDependence) => {
   const dispatch = useAppDispatch()
   const menuProduct: CartItem = {
     cartID: String(item.id + item.type),

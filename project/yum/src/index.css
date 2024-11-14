@@ -189,9 +189,10 @@ Menu
   padding-bottom: 2em;
 }
 
-.menuEffect:hover {
-  background-color: var(--clr-black);
-}
+/* .menuEffect:hover {
+  color: var(--clr-white);
+  background: var(--clr-black);
+} */
 
 .title {
   text-align: center;

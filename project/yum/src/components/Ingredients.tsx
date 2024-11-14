@@ -1,12 +1,24 @@
-const Ingredients = ({ ingredientItem, endOfArray, type, addToCart }: any) => {
+type IngredientsProps = {
+  ingredientItem: string
+  endOfArray: boolean
+  type: string
+  addToCart: () => void
+}
+
+const Ingredients = ({
+  ingredientItem,
+  endOfArray,
+  type,
+  addToCart,
+}: IngredientsProps) => {
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     // Toggle style directly on the clicked element
     const target = event.currentTarget
     target.style.backgroundColor =
-      target.style.backgroundColor === 'green' ? '' : 'green'
+      target.style.backgroundColor === 'black' ? '' : 'black'
     target.style.border =
       target.style.border === '2px solid darkgreen' ? '' : '2px solid darkgreen'
-
+    target.style.color = target.style.color === 'black' ? '' : 'white'
     addToCart() // Call your function when clicked
   }
 

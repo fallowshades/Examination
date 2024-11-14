@@ -7,10 +7,6 @@ export type CartItem = {
   amount: number
 }
 
-export type MappedCartItem = {
-  cartItem: CartItem
-}
-
 export type CartState = {
   //   id: number
   cartItems: CartItem[]
@@ -35,6 +31,12 @@ export type MenuItem = {
 export type GroupedMenuItems = {
   type: string
   items: MenuItem[]
+}
+
+export type OptimalGroupedMetsa = {
+  item: MenuItem
+  type: string
+  lazyBackendQuickFix: string[]
 }
 
 export type Orders = {

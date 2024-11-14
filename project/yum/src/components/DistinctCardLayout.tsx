@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import Item from '@/components/Item'
-
-const DistinctCardLayout = ({ item, type, lazyBackendQuickFix }: any) => {
-  const [clicked, setClicked] = useState(false)
+import { OptimalGroupedMetsa } from '@/utils/types'
+const DistinctCardLayout = ({
+  item,
+  type,
+  lazyBackendQuickFix,
+}: OptimalGroupedMetsa) => {
+  const [clicked, setClicked] = useState<boolean>(false)
 
   const itemStyle =
     type === 'wonton'
       ? {
-          backgroundColor: clicked ? 'green' : '',
+          backgroundColor: clicked ? 'black' : '',
           border: clicked ? '2px solid darkgreen' : '',
         }
       : {}
