@@ -9,9 +9,18 @@ interface Headers {
   'X-Tenant-Name'?: string // Optional property
 }
 import axios, { AxiosRequestConfig, AxiosHeaders } from 'axios'
+//type ApiResponse = Record<string, any>
+export type ApiResponse<T = any> = {
+  data?: T
+  error?: string
+}
 export const loader =
   (store: ReduxStore): LoaderFunction =>
-  async ({ request }: { request: Request }) => {
+  async ({
+    request,
+  }: {
+    request: Request
+  }): Promise<ApiResponse<MenuItem[]>> => {
     console.log('Loader function started')
 
     const params = Object.fromEntries([
@@ -83,9 +92,9 @@ export const loader =
       return { data }
     } catch (error) {
       console.error('Error fetching menu:', error)
-      return null // Return null or some error data
+      return { error: 'Error message' } // Return null or some error data
     }
-    return null
+    return { error: 'Error message' }
   }
 import { MenuItem } from '@/utils/types'
 import SharedCardLayout from '@/components/SharedCardLayout'

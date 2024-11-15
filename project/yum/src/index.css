@@ -182,7 +182,7 @@ Menu
 */
 
 .menu {
-  padding: 5rem 0;
+  padding: 2rem 0;
   background-color: var(--clay);
 }
 .menu-space {
@@ -247,7 +247,6 @@ Menu
   border-radius: var(--radius);
 }
 .item-info {
-  padding: 1em 1em;
   display: flex;
   align-items: center; /* Align items vertically in the center */
 

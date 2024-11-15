@@ -25,6 +25,10 @@ const Receipts = () => {
             />
           </div>
           <h1>Dina wontons tillagas</h1>
+          <br />
+          <br />
+          <br />
+          <br />
           <p>Eta 5 min</p>
         </div>
         <div className='lg:col-span-4 lg:pl-4'>
